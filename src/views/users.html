@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="library" ng-controller="userctrl">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>Library management</title>
+		<meta name="generator" content="Bootply" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+		<link href="lib/toastr/toastr.min.css" rel="stylesheet">
+		<!--[if lt IE 9]>
+			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="css/styles.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="loading" ></div>
+    
+		
+		
+<header class="navbar navbar-bright navbar-fixed-top" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand">Home</a>
+    </div>
+    <nav class="collapse navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+         <li>
+          <a href="/">Books</a>
+        </li>
+        <li>
+          <a href="/users.html">Users</a>
+        </li>
+        <li>
+          <a data-toggle="modal" data-target="#addnewbook">Add new book</a>
+        </li>
+        <li>
+          <a href="/transactions.html">Transactions</a>
+        </li>        
+      </ul>
+      <span class="admin_name">Admin user</span>
+      <ul class="nav navbar-right navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-search"></i></a>
+          <ul class="dropdown-menu" style="padding:12px;">
+            <form class="form-inline">
+              <button type="submit" class="btn btn-default pull-right"><i class="glyphicon glyphicon-search"></i></button><input type="text" class="form-control pull-left" placeholder="Search">
+            </form>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div id="addnewbook" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header header_style">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title title_style">Add new book</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" id="create_book">
+			<fieldset>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label"  for="name">Name</label>  
+			  <div class="col-md-4">
+			  <input id="name" name="name" ng-model="name_book" placeholder="name of book" class="form-control input-md" type="text">
+			    
+			  </div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label"  for="author">Author</label>  
+			  <div class="col-md-4">
+			  <input id="author" name="author" placeholder="name of author" ng-model="author_book" class="form-control input-md" required="" type="text">
+			    
+			  </div>
+			</div>
+			
+			<!-- Select Basic -->
+			<div class="form-group">
+			  <label class="col-md-4 control-label"  for="status">Status</label>
+			  <div class="col-md-4">
+			    <select id="status" name="status" ng-model="status_book" class="form-control">
+			      <option value="available">Available</option>
+			      <option value="unavailable">Unavailable</option>
+			    </select>
+			  </div>
+			</div>
+			
+			</fieldset>
+			</form>
+
+      </div>
+      <div class="modal-footer">
+	      <button type="button" class="btn btn-primary" ng-click="createNewBook()">Create</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="masthead">  
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <h1>Library management
+          <p class="lead"></p>
+        </h1>
+      </div>
+      <div class="col-md-5">
+        <div class=""> 
+          <div class="row">
+            <div class="col-sm-12">
+              <img src="img/readingbook.jpeg" height="200" width="400" />
+			
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
+  </div><!-- /cont -->
+  
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="top-spacer"> </div>
+      </div>
+    </div> 
+  </div><!-- /cont -->
+  
+</div>
+
+<!-- Modal -->
+<div id="createnewuser" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header header_style">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title title_style">Create new user</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" id="create_book">
+			<fieldset>
+				
+				<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label"  for="username">User name</label>  
+			  <div class="col-md-4">
+			  <input id="username" name="username" ng-model="username_user" placeholder="User name" class="form-control input-md" type="text">
+			    
+			  </div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label"  for="name">Name</label>  
+			  <div class="col-md-4">
+			  <input id="name" name="name" ng-model="name_user" placeholder="name" class="form-control input-md" type="text">
+			    
+			  </div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label"  for="email">Email</label>  
+			  <div class="col-md-4">
+			  <input id="email" name="email" placeholder="email address"  ng-model="email_user" class="form-control input-md" required type="email">
+			    
+			  </div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label"  for="contactnumber">Contact number</label>  
+			  <div class="col-md-4">
+			  <input id="contactnumber" name="contactnumber" placeholder="Contact number" ng-model="contactnumber_user" class="form-control input-md" required="" type="number">
+			    
+			  </div>
+			</div>
+			
+			</fieldset>
+			</form>
+
+      </div>
+      <div class="modal-footer">
+	        <input type="submit" value="Submit" />
+	      <button type="button" class="btn btn-primary" ng-click="createNewUser()">Create</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="container" >
+  <div class="row">
+    
+    <div class="col-md-12"> 
+	   
+      
+      <div class="panel">
+	       <button type="button" class="btn btn-primary create_user" data-toggle="modal" data-target="#createnewuser" style="text-align: center">Create new user</button>
+        <div class="panel-body borderstyle">
+          
+          
+          
+          <!--/stories-->
+          <div class="row" ng-repeat="user in userslist"> 
+	            
+            <br>
+            <div class="col-md-1 col-sm-1 text-center">
+              
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <h4 class="user_name">{{user.name}}</h4>
+             
+            </div>
+            <div class="col-md-4 col-sm-4" >
+	            
+	          
+              
+	             <small style="font-family:courier,'new courier';" class="text-muted"><a href="#" class="text-muted">{{user.email}}</a></small>
+	        </div>
+	        
+	         <div class="col-md-3 col-sm-3">
+             
+              
+               <small style="font-family:courier,'new courier';" class="text-muted"><a href="#" class="text-muted">{{user.contactnumber}}</a></small>
+             
+            </div>
+             <hr/>
+          </div>
+         
+         
+          <!--/stories-->
+          
+          
+                 
+          
+        </div>
+      </div>
+                                                                                       
+	                                                
+                                                      
+   	</div><!--/col-12-->
+  </div>
+</div>
+                                                
+                                                                                
+<hr>
+
+<div class="container" id="footer">
+  <div class="row">
+    <div class="col col-sm-12">
+      
+      <h1>Follow Us</h1>
+      <div class="btn-group">
+       <a class="btn btn-twitter btn-lg" href="#"><i class="icon-twitter icon-large"></i> Twitter</a>
+	   <a class="btn btn-facebook btn-lg" href="#"><i class="icon-facebook icon-large"></i> Facebook</a>
+	   <a class="btn btn-google-plus btn-lg" href="#"><i class="icon-google-plus icon-large"></i> Google+</a>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<hr>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <ul class="list-inline">
+          <li><i class="icon-facebook icon-2x"></i></li>
+          <li><i class="icon-twitter icon-2x"></i></li>
+          <li><i class="icon-google-plus icon-2x"></i></li>
+          <li><i class="icon-pinterest icon-2x"></i></li>
+        </ul>
+        
+      </div>
+      <div class="col-sm-6">
+          <p class="pull-right">Built with love</p>      
+      </div>
+    </div>
+  </div>
+</footer>
+	<!-- script references -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+		<script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+		<script src="lib/toastr/toastr.min.js"></script>
+		<script type="text/javascript">
+			$(window).load(function() {
+				$(".loading").fadeOut("slow");
+			})
+			
+			
+			
+			</script>
+		<script>
+			var app = angular.module("library", []); 
+			app.controller("userctrl", function($scope,$http, $rootScope) {
+			   
+			   function isValidEmailAddress(emailAddress) {
+				    var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+				    return pattern.test(emailAddress);
+				};
+			   
+			   $http.get('/getusers').then(function(response) {
+				   // process response here..
+				   $scope.userslist = response.data.usersdata;
+				   
+				   
+				   
+				   
+				 }, function(response) {
+				});
+				
+				$scope.username_user='';;
+				$scope.name_user='';
+				 $scope.email_user='';
+				 $scope.contactnumber_user='';
+				
+				$scope.createNewUser = function(){
+					
+					$(".loading").fadeIn("slow");
+					
+					var formData = {};
+					
+					
+					
+					
+					formData.username = $scope.username_user;
+					formData.name= $scope.name_user;
+					formData.email = $scope.email_user;
+					formData.contactnumber = $scope.contactnumber_user;
+					
+					if(formData.username=='' || formData.name=='' || formData.email=='')
+					{
+						toastr.error('Please fill all the information');
+						
+						$(".loading").fadeOut("slow");
+						return;
+					}
+					
+					
+					if( !isValidEmailAddress( formData.email ) ) { 
+						
+						toastr.error('Please fill email like name@email.com');
+						
+						$(".loading").fadeOut("slow");
+						return;
+						
+					}
+					
+					var numericReg = /^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/;
+				    if(!numericReg.test(formData.contactnumber)) {
+				        toastr.error('Please enter only number in contact number');
+						
+						$(".loading").fadeOut("slow");
+						return;
+				    }
+				    
+				    
+				    var characterReg = /^([a-zA-Z0-9]{0,10})$/;
+					    if(!characterReg.test(formData.contactnumber)) {
+					        toastr.error('Please enter max of 10 numbers');
+						
+								$(".loading").fadeOut("slow");
+								return;
+					    }
+					
+					$http.post('/newuser',formData).then(function(response) {
+					   // process response here..
+					   
+					   toastr.success('User created successfuly');
+					   
+					   $(".loading").fadeOut("slow");
+					   
+					   
+					   $('#createnewuser').modal('hide');
+					   
+					   	$scope.username_user='';;
+				$scope.name_user='';
+				 $scope.email_user='';
+				 $scope.contactnumber_user='';
+					   
+					    $scope.userslist=$scope.userslist.concat(response.data.usersdata) ;
+					   
+					 }, function(response) {
+					});
+					
+					
+				}
+			   
+			   
+			});
+			</script>
+	</body>
+</html>
