@@ -19,4 +19,6 @@ Start the server.
 $ node server.js
 
 Open a web browser and navigate to http://localhost:5000/ to see the example in action. 
+
+
 Log in using username 'admin' and password 'testing'.
