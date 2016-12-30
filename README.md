@@ -7,7 +7,11 @@ This example demonstrates how to use Express 4.x and Passport to authenticate ad
 To install this example on your computer, clone the repository and install dependencies.
 
 $ git clone https://github.com/eeshdarthvader/library_management.git
+
+
 $ cd library_management
+
+
 $ npm install
 
 Start the server.
