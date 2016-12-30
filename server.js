@@ -33,11 +33,11 @@ passport.use(new Strategy(
 
 
 passport.serializeUser(function(user, cb) {
-  cb(null, user.id);
+  cb(null, user.username);
 });
 
-passport.deserializeUser(function(id, cb) {
-  adminCtrl.findById(id, function (err, user) {
+passport.deserializeUser(function(username, cb) {
+  adminCtrl.findUserByUsername(username, function (err, user) {
     if (err) { return cb(err); }
     cb(null, user);
   });
@@ -64,8 +64,10 @@ app.use(passport.session());
 
 app.use(cookieParser());
 
-app.use(expressSession({secret:'123'}));
+app.use(expressSession({secret:'123',resave: true,
+    saveUninitialized: true}));
 
+var sess;
 
 app.get('/login',
   function(req, res){
@@ -73,20 +75,19 @@ app.get('/login',
   });
   
   
-  app.get('/register',
-  function(req, res){
-    res.render('register');
-  });
+ 
   
 app.post('/login', 
   passport.authenticate('local', { failureRedirect: '/login' }),
   function(req, res) {
-	  
+	
+	sess = req.session.passport.user;
     res.redirect('/');
   });
   
 app.get('/logout',
   function(req, res){
+	  req.session.destroy();
     req.logout();
     res.redirect('/');
 });
@@ -116,16 +117,102 @@ app.listen(port, function(err){
 })
 
 
+
+
+
 app.use(express.static('public'));
 
-app.use(express.static('src/views'));
-
-app.get('/',require('connect-ensure-login').ensureLoggedIn(), function(request, response){
+ //app.use(express.static('src/views'));
+ 
+ 
+/*
+ app.get('/', function(request, response){
 	
-	response.send('Hello');
+	console.log('session',sess);
+	
+	response.render('index');
+	
+	
+});
+*/
+
+
+app.get('/', function(request, response){
+	
+	
+	if(request.session.passport && request.session.passport.user) {
+		
+		response.render('index', {user: sess,title:'home'});
+		
+	} else {
+		//console.log('session',request.session.passport.user);
+		response.redirect("/login");
+	}
+	
+	
+	
 	
 });
 
+
+app.get('/users', function(request, response){
+	
+	
+	if(request.session.passport && request.session.passport.user) {
+		
+		console.log('session',request.session.passport.user);
+	
+	response.render('users', {user: sess,title:'home'});
+		
+	} else {
+		//console.log('session',request.session.passport.user);
+		response.redirect("/login");
+	}
+	
+	
+	
+	
+});
+
+
+app.get('/admin', function(request, response){
+	
+	
+	if(request.session.passport && request.session.passport.user) {
+		
+		
+	
+	response.render('admin', {user: sess,title:'home'});
+		
+	} else {
+		//console.log('session',request.session.passport.user);
+		response.redirect("/login");
+	}
+	
+	
+	
+	
+});
+
+
+app.get('/transactions', function(request, response){
+	
+	
+	if(request.session.passport && request.session.passport.user) {
+		
+		console.log('session',request.session.passport.user);
+	
+	response.render('transactions', {user: sess,title:'home'});
+		
+	} else {
+		//console.log('session',request.session.passport.user);
+		response.redirect("/login");
+	}
+	
+	
+	
+	
+});
 
 
 
@@ -188,6 +275,18 @@ app.post('/deletetransaction', function(req,res){
 app.post('/createadmin', function(req,res){
 	
 	return adminCtrl.createAdmin(req,res);
+})
+
+
+app.get('/username', function(req,res){
+	
+	return res.send(req.session);
+})
+
+
+app.get('/getadmins', function(req,res){
+	
+	return adminCtrl.getadmins(req,res);
 })
 
 

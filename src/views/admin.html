@@ -147,7 +147,7 @@
 </div>
 
 <!-- Modal -->
-<div id="createnewuser" class="modal fade" role="dialog">
+<div id="createnewadmin" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -187,6 +187,16 @@
 			  </div>
 			</div>
 			
+			
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label"  for="password">Password</label>  
+			  <div class="col-md-4">
+			  <input id="password" name="password" placeholder="Password"  ng-model="password_user" class="form-control input-md" required type="password">
+			    
+			  </div>
+			</div>
+			
 			<!-- Text input-->
 			<div class="form-group">
 			  <label class="col-md-4 control-label"  for="contactnumber">Contact number</label>  
@@ -201,7 +211,7 @@
 
       </div>
       <div class="modal-footer">
-	     
+	       
 	      <button type="button" class="btn btn-primary" ng-click="createNewUser()">Create</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
@@ -217,13 +227,13 @@
 	   
       
       <div class="panel">
-	       <button type="button" class="btn btn-primary create_user" data-toggle="modal" data-target="#createnewuser" style="text-align: center">Create new user</button>
+	       <button type="button" class="btn btn-primary create_user" data-toggle="modal" data-target="#createnewadmin" style="text-align: center">Create new admin</button>
         <div class="panel-body borderstyle">
           
           
           
           <!--/stories-->
-          <div class="row" ng-repeat="user in userslist"> 
+          <div class="row" ng-repeat="user in adminlist"> 
 	            
             <br>
             <div class="col-md-1 col-sm-1 text-center">
@@ -338,12 +348,10 @@
 				 }, function(response) {
 				});
 			   
-			   $http.get('/getusers').then(function(response) {
+			   $http.get('/getadmins').then(function(response) {
 				   // process response here..
-				   $scope.userslist = response.data.usersdata;
+				   $scope.adminlist = response.data.admin;
 				   
-				   
-				   console.log($scope.userslist);
 				   
 				 }, function(response) {
 				});
@@ -363,11 +371,12 @@
 					
 					
 					formData.username = $scope.username_user;
+					formData.password = $scope.password_user;
 					formData.name= $scope.name_user;
 					formData.email = $scope.email_user;
 					formData.contactnumber = $scope.contactnumber_user;
 					
-					if(formData.username=='' || formData.name=='' || formData.email=='')
+					if(formData.username=='' || formData.name=='' || formData.email=='' || formData.password=='')
 					{
 						toastr.error('Please fill all the information');
 						
@@ -402,22 +411,22 @@
 								return;
 					    }
 					
-					$http.post('/newuser',formData).then(function(response) {
+					$http.post('/createadmin',formData).then(function(response) {
 					   // process response here..
 					   
-					   toastr.success('User created successfuly');
+					   toastr.success('Admin created successfuly');
 					   
 					   $(".loading").fadeOut("slow");
 					   
 					   
-					   $('#createnewuser').modal('hide');
+					   $('#createnewadmin').modal('hide');
 					   
 					   	$scope.username_user='';;
 				$scope.name_user='';
 				 $scope.email_user='';
 				 $scope.contactnumber_user='';
 					   
-					    $scope.userslist=$scope.userslist.concat(response.data.usersdata) ;
+					    $scope.adminlist=$scope.adminlist.concat(response.data.admin) ;
 					    
 					   
 					 }, function(response) {

@@ -58,10 +58,39 @@ exports.createAdmin = function(req,res){
 	entry.save();
 	
 	
-	res.status(200).send({ status: 'Admin created' })
+	//res.status(200).send({ status: 'Admin created' })
 	
 	//res.json({data:result});
+	
+	var result = [{
+		
+		
+		name:req.body.name,
+		username:req.body.username,
+		password:req.body.password,
+		email:req.body.email,
+		contactnumber:req.body.contactnumber
+		
+		
+	}];
+	
+	res.json({usersdata:result});
 
 	
 	
+}
+
+
+
+
+exports.getadmins = function(req,res)
+{
+	
+	var query = Admin.find();
+	
+		query.sort().exec(function(err, result){
+	
+			res.json({ admin:result });
+			
+		})
 }

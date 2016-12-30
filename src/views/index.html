@@ -34,20 +34,20 @@
     <nav class="collapse navbar-collapse" role="navigation">
       <ul class="nav navbar-nav">
         <li>
-          <a href="/">Books</a>
+          <a href="/admin">Admin</a>
         </li>
         <li>
-          <a href="/users.html">Users</a>
+          <a href="/users">Users</a>
         </li>
         <li>
           <a data-toggle="modal" data-target="#addnewbook">Add new book</a>
         </li>
         <li>
-          <a href="/transactions.html">Transactions</a>
+          <a href="/transactions">Transactions</a>
         </li>
         
       </ul>
-      <span class="admin_name"><%= user.local.password %></span>
+      <span class="admin_name">[[usernameloggedin]]</span>
       <ul class="nav navbar-right navbar-nav">
         <li class="dropdown">
         
@@ -176,7 +176,7 @@
 			   
 			    
 			    <select id="user_issue" name="user_issue" ng-model="user_issue" class="form-control">
-			         <option ng-repeat="user in userslist" value="{{user}}">{{user.name}}</option>
+			         <option ng-repeat="user in userslist" value="[[user]]">[[user.name]]</option>
 			     </select>  
 			    
 			  </div>
@@ -224,17 +224,17 @@
           
           
           <!--/stories-->
-          <div class="row book_list" ng-repeat="book in books|orderBy:'createdOn':true" id="{{$index}}">    
+          <div class="row book_list" ng-repeat="book in books|orderBy:'createdOn':true" id="[[$index]]">    
             <br>
             <div class="col-md-2 col-sm-3 text-center">
-              <a class="story-title" href="#"><img alt="" src="{{holderLink}}" style="width:100px;height:100px" class=""></a>
+              <a class="story-title" href="#"><img alt="" src="[[holderLink]]" style="width:100px;height:100px" class=""></a>
             </div>
             <div class="col-md-6 col-sm-5">
-              <h3>{{book.name}}</h3>
+              <h3>[[book.name]]</h3>
               <div class="row">
                 <div class="col-xs-9">
                   
-                  <small style="font-family:courier,'new courier';" class="text-muted"><a href="#" class="text-muted">{{book.author}}</a></small>
+                  <small style="font-family:courier,'new courier';" class="text-muted"><a href="#" class="text-muted">[[book.author]]</a></small>
                   </h4></div>
                 <div class="col-xs-3"></div>
               </div>
@@ -361,7 +361,10 @@
 			
 			</script>
 		<script>
-			var app = angular.module("library", []); 
+			var app = angular.module("library", [],function($interpolateProvider) {
+    $interpolateProvider.startSymbol('[[');
+    $interpolateProvider.endSymbol(']]');
+}); 
 			
 			app.directive('tooltip', function(){
 			    return {
@@ -385,6 +388,15 @@
 			   $http.get('/bookslist').then(function(response) {
 				   // process response here..
 				   $scope.books = response.data.data;
+				   
+				 }, function(response) {
+				});
+				
+				$http.get('/username').then(function(response) {
+				   // process response here..
+				  console.log(response.data);
+				  
+				  $scope.usernameloggedin = response.data.passport.user;
 				   
 				 }, function(response) {
 				});

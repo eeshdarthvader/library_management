@@ -33,19 +33,19 @@
     <nav class="collapse navbar-collapse" role="navigation">
       <ul class="nav navbar-nav">
          <li>
-          <a href="/">Books</a>
+          <a href="/admin">Admin</a>
         </li>
         <li>
-          <a href="/users.html">Users</a>
+          <a href="/users">Users</a>
         </li>
         <li>
           <a data-toggle="modal" data-target="#addnewbook">Add new book</a>
         </li>
         <li>
-          <a href="/transactions.html">Transactions</a>
+          <a href="/transactions">Transactions</a>
         </li>        
       </ul>
-      <span class="admin_name">Admin user</span>
+      <span class="admin_name">[[usernameloggedin]]</span>
       <ul class="nav navbar-right navbar-nav">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-search"></i></a>
@@ -233,14 +233,14 @@
                    </thead>
     <tbody>
     
-    <tr ng-repeat="t in  transactions" id="{{t._id}}">
+    <tr ng-repeat="t in  transactions" id="[[t._id]]">
 	    
-	    <td>{{t.book.name}}</td>
+	    <td>[[t.book.name]]</td>
 	    <td><span ng-if="t.transaction_status=='borrow'" style="color: brown">Borrowed</span><span ng-if="t.transaction_status=='return'" style="color: green">Returned</span></td>
-	    <td>{{t.user.name}}</td>
-	    <td>{{t.user.email}}</td>
-	    <td ><span ng-if="t.transaction_status=='borrow'">{{t.duedate|date:'medium'}}</span></td>
-	  <td ><span ng-if="t.transaction_status=='return'">{{t.duedate|date:'medium'}}</span></td>
+	    <td>[[t.user.name]]</td>
+	    <td>[[t.user.email]]</td>
+	    <td ><span ng-if="t.transaction_status=='borrow'">[[t.duedate|date:'medium']]</span></td>
+	  <td ><span ng-if="t.transaction_status=='return'">[[t.duedate|date:'medium']]</span></td>
 	    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete"  data  ng-click="setDataToDelete(t._id)"><span class="glyphicon glyphicon-trash"></span></button></p></td>
     </tr>
 
@@ -343,9 +343,20 @@
 			
 			</script>
 		<script>
-			var app = angular.module("library", []); 
+			var app = angular.module("library", [],function($interpolateProvider) {
+    $interpolateProvider.startSymbol('[[');
+    $interpolateProvider.endSymbol(']]');
+}); 
 			app.controller("transactctrl", function($scope,$http, $rootScope) {
 			   
+			   $http.get('/username').then(function(response) {
+				   // process response here..
+				  console.log(response.data);
+				  
+				  $scope.usernameloggedin = response.data.passport.user;
+				   
+				 }, function(response) {
+				});
 			   
 			   
 			   $http.get('/gettransaction').then(function(response) {
